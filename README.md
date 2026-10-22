@@ -125,5 +125,4 @@ Meaningful commits were used throughout, for example:
 `feat: slots listing`, `feat: create appointment with business rules`,
 `feat: advisor dashboard`, `feat: admin dashboard with Chart.js`, `test: business rules`, `docs: README`.
 
-## Author
-Your Name: University Project
+
