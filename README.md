@@ -85,9 +85,9 @@ advisor-system/
 
 | Role | Email | Password |
 |---|---|---|
-| Admin | admin@demo.com | Admin123! |
-| Advisor | advisor@demo.com | Advisor123! |
-| Student | student@demo.com | Student123! |
+| Admin | admin@demo.com | ***! |
+| Advisor | advisor@demo.com | ***! |
+| Student | student@demo.com | ***! |
 
 > For demonstration only. Change these passwords in any real deployment.
 
