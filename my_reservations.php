@@ -10,7 +10,7 @@ $messageType = "success";
 if (isset($_GET["message"]) && $_GET["message"] === "created") {
     $message = "Your reservation was submitted with Pending status.";
 }
-
+//من 14 إلى 37: قم بالإلغاء عبر POST مع CSRF وتحقق من رقم الحجز.
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $reservationId = filter_var($_POST["reservation_id"] ?? null, FILTER_VALIDATE_INT);
 
@@ -107,6 +107,7 @@ try {
                     </tr>
                 </thead>
                 <tbody>
+                    //جدول الحجوزات. تظهر حالة الشارة الملوّنة، وزر الإلغاء فقط إذا كانت can_cancel = 1الحالة معلقة/مؤكدة.
                     <?php foreach ($reservations as $reservation): ?>
                         <tr>
                             <td><?= htmlspecialchars(date("F j, Y", strtotime($reservation["slot_date"])), ENT_QUOTES, "UTF-8") ?></td>

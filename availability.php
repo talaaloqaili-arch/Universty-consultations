@@ -7,7 +7,8 @@ $message = "";
 $messageType = "error";
 $dateInput = $_GET["date"] ?? "";
 $selectedDate = is_string($dateInput) ? trim($dateInput) : "";
-$userId = isset($_SESSION["user_id"]) ? (int) $_SESSION["user_id"] : null;
+$userId = isset($_SESSION["user_id"]) ? require_login() : null;
+$canBook = $userId !== null && ($_SESSION["role"] ?? "") === "student";//: يتحقق من أن المستخدم مسجّل الدخول وأن دوره طالب (student) قبل السماح بالحجز.
 
 if ($selectedDate !== "") {
     $date = DateTime::createFromFormat("!Y-m-d", $selectedDate);
@@ -131,7 +132,7 @@ try {
                         <span>Places available</span>
                         <span><?= (int) $slot["remaining_capacity"] ?> of <?= (int) $slot["capacity"] ?></span>
                     </div>
-                    <?php if ($userId !== null): ?>
+                    <?php if ($canBook): ?>
                         <form class="slot-form" method="post" action="availability.php<?= $selectedDate !== "" ? "?date=" . rawurlencode($selectedDate) : "" ?>">
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token(), ENT_QUOTES, "UTF-8") ?>">
                             <input type="hidden" name="slot_id" value="<?= (int) $slot["slot_id"] ?>">
@@ -141,6 +142,8 @@ try {
                             </div>
                             <button type="submit">Book this appointment <span aria-hidden="true">→</span></button>
                         </form>
+                    <?php elseif ($userId !== null): ?>
+                        <p class="notice">Only active student accounts can book an appointment.</p>
                     <?php else: ?>
                         <a class="button" href="login.php">Log in to book <span aria-hidden="true">→</span></a>
                     <?php endif; ?>

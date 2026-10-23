@@ -3,12 +3,12 @@ session_start();
 require_once __DIR__ . "/user.php";
 
 $error = "";
-
+// إذا كان المستخدم مسجلاً الدخول بالفعل، يتم إعادة توجيهه إلى لوحة التحكم المناسبة بناءً على دوره.
 if (isset($_SESSION["user_id"])) {
     header("Location: " . (($_SESSION["role"] ?? "") === "admin" ? "admin_dashboard.php" : "dashboard.php"));
     exit;
 }
-
+// التحقق من إرسال الفورم 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"] ?? "");
     $password = $_POST["password"] ?? "";
@@ -18,16 +18,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Please enter a valid email address.";
     } else {
-        try {
+        try {//يستدعي login
             require_once __DIR__ . "/db.php";
             $userModel = new User($pdo);
             $user = $userModel->login($email, $password);
 
             if ($user !== null) {
-                session_regenerate_id(true);
-                $_SESSION["user_id"] = $user["user_id"];
-                $_SESSION["full_name"] = $user["full_name"];
-                $_SESSION["role"] = $user["role"];
+                session_regenerate_id(true);//يولد معرف جلسة جديد لتقليل مخاطر اختطاف الجلسة.
+                $_SESSION["user_id"] = $user["user_id"];//يخزن معرف المستخدم في الجلسة لتحديد المستخدم الحالي.
+                $_SESSION["full_name"] = $user["full_name"];//يخزن الاسم الكامل للمستخدم في الجلسة لعرضه في واجهة المستخدم.
+                $_SESSION["role"] = $user["role"];//يخزن دور المستخدم في الجلسة لتحديد صلاحياته.
 
                 header("Location: " . ($user["role"] === "admin" ? "admin_dashboard.php" : "dashboard.php"));
                 exit;
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $error = "The email or password is incorrect, or the account is inactive.";
         } catch (PDOException $exception) {
-            error_log("Login database error: " . $exception->getMessage());
+            error_log("Login database error: " . $exception->getMessage());//تسجيل الخطأ في سجل الأخطاء الخاص بالخادم لتسهيل التشخيص.
             $error = "Unable to connect to the database. Please try again later.";
         }
     }

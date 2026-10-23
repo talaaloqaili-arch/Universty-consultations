@@ -1,26 +1,24 @@
 <?php
+// تحميل الكلاس والاتصال، وتجهيز المتغيرات
 require_once __DIR__ . "/user.php";
 require_once __DIR__ . "/db.php";
 
 $message = "";
 $departments = [];
 
-try {
-    $departments = $pdo->query(
-        "SELECT department_id, department_name
-         FROM departments
-         ORDER BY department_name"
-    )->fetchAll();
+try {//إنشاء كائن User واستدعاء الدالة getDepartments للحصول على قائمة الأقسام من قاعدة البيانات.
+    $userModel = new User($pdo);
+    $departments = $userModel->getDepartments();
 } catch (PDOException $exception) {
     error_log("Registration department list database error: " . $exception->getMessage());
     $message = "Unable to load departments. Please try again later.";
 }
-
+// التحقق من إرسال الفورم
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = trim($_POST["name"] ?? "");
     $email = trim($_POST["email"] ?? "");
     $password = $_POST["password"] ?? "";
-    $departmentId = filter_var($_POST["department_id"] ?? null, FILTER_VALIDATE_INT);
+    $departmentId = filter_var($_POST["department_id"] ?? null, FILTER_VALIDATE_INT);//يتحقق من القسم
 
     if (
         $name === ""
@@ -37,9 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif ($departments === []) {
         $message = "No departments are available for registration.";
     } else {
-        try {
-            $userModel = new User($pdo);
-
+        try {//يستدعي register
             if ($userModel->register($name, $email, $password, $departmentId)) {
                 header("Location: login.php");
                 exit;
@@ -47,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $message = "An account with this email already exists.";
         } catch (PDOException $exception) {
-            error_log("Registration database error: " . $exception->getMessage());
+            error_log("Registration database error: " . $exception->getMessage());//الخطا في القاعدة
             $message = "Unable to complete registration. Please try again later.";
         }
     }
@@ -83,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <p class="eyebrow">Get started</p>
             <h2>Create your account</h2>
             <p class="lead">It only takes a moment to get connected with an advisor.</p>
-            <?php if ($message !== ""): ?>
+            <?php if ($message !== ""): ?>//تعرض الخطأ
                 <p class="notice error" role="alert"><?= htmlspecialchars($message, ENT_QUOTES, "UTF-8") ?></p>
             <?php endif; ?>
             <form class="auth-form" action="register.php" method="POST">

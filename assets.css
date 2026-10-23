@@ -249,6 +249,14 @@ h1 {
     padding: clamp(1.25rem, 4vw, 2rem);
 }
 
+.slot-management-form {
+    max-width: 720px;
+}
+
+.slot-management-form .slot-form {
+    max-width: 520px;
+}
+
 .form-panel h2 {
     margin-bottom: 0;
 }
@@ -286,6 +294,56 @@ h1 {
 
 .managed-slots .page-heading h2 {
     margin-bottom: 0;
+}
+
+.managed-slots .page-heading .input-hint {
+    padding-bottom: 0.2rem;
+}
+
+.managed-slots .reservation-table th,
+.managed-slots .reservation-table td {
+    text-align: left;
+}
+
+.managed-slots .reservation-table td:last-child,
+.managed-slots .reservation-table th:last-child {
+    text-align: right;
+}
+
+.managed-slots .button-danger {
+    min-height: 36px;
+    text-decoration: none;
+}
+
+.admin-data-section {
+    margin-top: 3rem;
+}
+
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-actions form {
+    margin: 0;
+}
+
+.admin-actions button {
+    min-height: 36px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.82rem;
+}
+
+.slot-actions {
+    min-width: 145px;
+}
+
+.reservation-table td select,
+.reservation-table td input {
+    min-width: 115px;
+    min-height: 40px;
+    padding: 0.45rem;
 }
 
 .field {
@@ -863,6 +921,10 @@ textarea {
     .filter-panel {
         align-items: stretch;
         flex-direction: column;
+    }
+
+    .slot-management-form .form-row {
+        grid-template-columns: 1fr;
     }
 
     .filter-panel .button,
