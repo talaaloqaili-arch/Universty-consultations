@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $date = is_string($_POST["slot_date"] ?? null) ? trim($_POST["slot_date"]) : "";
             $startTime = is_string($_POST["start_time"] ?? null) ? trim($_POST["start_time"]) : "";
             $endTime = is_string($_POST["end_time"] ?? null) ? trim($_POST["end_time"]) : "";
-
+//يتحقق من المرشد والسعة ثم create
             if ($action === "add_slot") {
                 if ($advisorId === false || $advisorId === null || $capacity === false || $capacity === null) {
                     throw new DomainException("Enter a valid advisor and capacity.");

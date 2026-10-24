@@ -29,7 +29,7 @@ final class User
 
         return $user;//يرجع مصفوفة تحتوي على user_id وfull_name وemail وrole.
     }
-
+//نقل استعلام الأقسام من register.php.
     public function getDepartments(): array
     {
         $statement = $this->db->query(
@@ -40,7 +40,7 @@ final class User
 
         return $statement->fetchAll();
     }
-
+//كل المستخدمين مع اسم القسم، بـ LEFT JOINليظهر المستخدم حتى بلا قسم.
     public function all(): array
     {
         $statement = $this->db->query(
@@ -52,7 +52,7 @@ final class User
 
         return $statement->fetchAll();
     }
-
+//تغيير حالة الحساب (تفعيل أو تعطيل) مع التحقق من صلاحية المستخدم الحالي.
     public function setActive(int $userId, bool $isActive, int $currentAdminId): void
     {
         if ($userId < 1) {
